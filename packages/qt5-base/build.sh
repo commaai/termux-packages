@@ -18,6 +18,11 @@ bin/syncqt.pl
 lib/qt/mkspecs/termux-cross
 "
 
+
+termux_step_post_get_source () {
+  cp -r "${TERMUX_PKG_BUILDER_DIR}/eglfs_surfaceflinger/" "${TERMUX_PKG_SRCDIR}/qtbase/src/plugins/platforms/eglfs/deviceintegration"
+}
+
 termux_step_pre_configure () {
     if [ "${TERMUX_ARCH}" = "arm" ]; then
         ## -mfpu=neon causes build failure on ARM.
@@ -71,6 +76,7 @@ termux_step_configure () {
         -skip qtcharts \
         -skip qtconnectivity \
         -skip qtdatavis3d \
+        -skip qtdeclarative \
         -skip qtdoc \
         -skip qtgamepad \
         -skip qtgraphicaleffects \
@@ -113,8 +119,7 @@ termux_step_configure () {
         -qt-harfbuzz \
         -no-opengl \
         -no-vulkan \
-        -qpa xcb \
-        -no-eglfs \
+        -qpa eglfs \
         -no-gbm \
         -no-kms \
         -no-linuxfb \
