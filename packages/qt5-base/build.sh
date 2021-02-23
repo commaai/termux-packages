@@ -2,7 +2,7 @@ TERMUX_PKG_HOMEPAGE=https://www.qt.io/
 TERMUX_PKG_DESCRIPTION="A cross-platform application and UI framework"
 TERMUX_PKG_LICENSE="LGPL-3.0"
 TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
-TERMUX_PKG_VERSION=5.11.3
+TERMUX_PKG_VERSION=5.11.3  # TODO: use 5.12.8
 TERMUX_PKG_REVISION=28
 #TERMUX_PKG_SRCURL="http://master.qt.io/archive/qt/${TERMUX_PKG_VERSION%.*}/${TERMUX_PKG_VERSION}/single/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SRCURL="https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
@@ -17,11 +17,6 @@ bin/fixqt4headers.pl
 bin/syncqt.pl
 lib/qt/mkspecs/termux-cross
 "
-
-
-termux_step_post_get_source () {
-  cp -r "${TERMUX_PKG_BUILDER_DIR}/eglfs_surfaceflinger/" "${TERMUX_PKG_SRCDIR}/qtbase/src/plugins/platforms/eglfs/deviceintegration"
-}
 
 termux_step_pre_configure () {
     if [ "${TERMUX_ARCH}" = "arm" ]; then
@@ -43,6 +38,8 @@ termux_step_pre_configure () {
         -e "s|@TERMUX_CXXFLAGS@|${CPPFLAGS} ${CXXFLAGS}|" \
         -e "s|@TERMUX_LDFLAGS@|${LDFLAGS}|" \
         "${TERMUX_PKG_BUILDER_DIR}/qmake.conf" > "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross/qmake.conf"
+
+    cp -r "${TERMUX_PKG_BUILDER_DIR}/eglfs_surfaceflinger/" "${TERMUX_PKG_SRCDIR}/qtbase/src/plugins/platforms/eglfs/deviceintegration"
 }
 
 termux_step_configure () {
@@ -135,6 +132,7 @@ termux_step_configure () {
         -no-xkbcommon-evdev \
         -gif \
         -ico \
+        -sql-sqlite \
         -system-libpng \
         -qt-libjpeg \
         -no-feature-dnslookup \

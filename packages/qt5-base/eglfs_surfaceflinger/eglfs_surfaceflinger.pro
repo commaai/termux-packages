@@ -4,13 +4,13 @@ QT += core-private gui-private eglfsdeviceintegration-private
 
 DEFINES += QT_EGL_NO_X11
 
-QMAKE_CFLAGS = $$replace(QMAKE_CFLAGS, "-I/data/data/com.termux/files/usr/include", "")
-QMAKE_CXXFLAGS = $$replace(QMAKE_CFLAGS, "-I/data/data/com.termux/files/usr/include", "")
+#QMAKE_CFLAGS = $$replace(QMAKE_CFLAGS, "-I/data/data/com.termux/files/usr/include", "")
+#QMAKE_CXXFLAGS = $$replace(QMAKE_CFLAGS, "-I/data/data/com.termux/files/usr/include", "")
 
 INCLUDEPATH += $$PWD/../../api \
-               $${ANDROID_BUILD_TOP}/frameworks/native/include \
-               $${ANDROID_BUILD_TOP}/hardware/libhardware/include \
-               $${ANDROID_BUILD_TOP}/system/core/include
+               $$PWD/include/android_frameworks_native/include \
+               $$PWD/include/android_hardware_libhardware/include/hardware/ \
+               $$PWD/android_system_core/include
 
 CONFIG += egl
 
