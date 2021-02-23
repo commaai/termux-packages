@@ -96,6 +96,7 @@ termux_step_configure () {
         -skip qtserialport \
         -skip qtspeech \
         -skip qtsvg \
+        -skip qttools \
         -skip qttranslations \
         -skip qtvirtualkeyboard \
         -skip qtwayland \
@@ -106,6 +107,7 @@ termux_step_configure () {
         -skip qtwebview \
         -skip qtwinextras \
         -skip qtxmlpatterns \
+        -skip x11extras \
         -no-accessibility \
         -no-glib \
         -no-eventfd \
@@ -117,9 +119,10 @@ termux_step_configure () {
         -no-system-proxies \
         -no-cups \
         -qt-harfbuzz \
-        -no-opengl \
+        -opengl \
         -no-vulkan \
-        -qpa eglfs \
+        -egl \
+        -eglfs \
         -no-gbm \
         -no-kms \
         -no-linuxfb \
@@ -134,7 +137,8 @@ termux_step_configure () {
         -ico \
         -system-libpng \
         -qt-libjpeg \
-        -no-feature-dnslookup
+        -no-feature-dnslookup \
+        -no-feature-dbus
 }
 
 termux_step_make() {
@@ -155,10 +159,10 @@ termux_step_make_install() {
         cp -a bin bin.host
     }
 
-    cd "${TERMUX_PKG_SRCDIR}/qttools" && {
-        mkdir -p bin.host
-        cp -a bin/{lconvert,lrelease,lupdate,qtattributionsscanner} bin.host/
-    }
+    #cd "${TERMUX_PKG_SRCDIR}/qttools" && {
+    #    mkdir -p bin.host
+    #    cp -a bin/{lconvert,lrelease,lupdate,qtattributionsscanner} bin.host/
+    #}
 
     #######################################################
     ##
@@ -167,40 +171,40 @@ termux_step_make_install() {
     #######################################################
 
     ## libQt5Bootstrap.a (qt5-base)
-    cd "${TERMUX_PKG_SRCDIR}/qtbase/src/tools/bootstrap" && {
-        make clean
-
-        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-            -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-        make -j "${TERMUX_MAKE_PROCESSES}"
-        install -Dm644 ../../../lib/libQt5Bootstrap.a "${TERMUX_PREFIX}/lib/libQt5Bootstrap.a"
-        install -Dm644 ../../../lib/libQt5Bootstrap.prl "${TERMUX_PREFIX}/lib/libQt5Bootstrap.prl"
-    }
+    #cd "${TERMUX_PKG_SRCDIR}/qtbase/src/tools/bootstrap" && {
+    #    make clean
+    #
+    #    "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+    #        -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+    #
+    #    make -j "${TERMUX_MAKE_PROCESSES}"
+    #    install -Dm644 ../../../lib/libQt5Bootstrap.a "${TERMUX_PREFIX}/lib/libQt5Bootstrap.a"
+    #    install -Dm644 ../../../lib/libQt5Bootstrap.prl "${TERMUX_PREFIX}/lib/libQt5Bootstrap.prl"
+    #}
 
     ## libQt5QmlDevTools.a (qt5-declarative)
-    cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/src/qmldevtools" && {
-        make clean
-
-        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-            -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-        make -j "${TERMUX_MAKE_PROCESSES}"
-        install -Dm644 ../../lib/libQt5QmlDevTools.a "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.a"
-        install -Dm644 ../../lib/libQt5QmlDevTools.prl "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.prl"
-    }
+    #cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/src/qmldevtools" && {
+    #    make clean
+    #
+    #    "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+    #        -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+    #
+    #    make -j "${TERMUX_MAKE_PROCESSES}"
+    #    install -Dm644 ../../lib/libQt5QmlDevTools.a "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.a"
+    #    install -Dm644 ../../lib/libQt5QmlDevTools.prl "${TERMUX_PREFIX}/lib/libQt5QmlDevTools.prl"
+    #}
 
     ## libQt5PacketProtocol.a (qt5-declarative)
-    cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/src/plugins/qmltooling/packetprotocol" && {
-        make clean
-
-        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-            -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-        make -j "${TERMUX_MAKE_PROCESSES}"
-        install -Dm644 ../../../../lib/libQt5PacketProtocol.a "${TERMUX_PREFIX}/lib/libQt5PacketProtocol.a"
-        install -Dm644 ../../../../lib/libQt5PacketProtocol.prl "${TERMUX_PREFIX}/lib/libQt5PacketProtocol.prl"
-    }
+    #cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/src/plugins/qmltooling/packetprotocol" && {
+    #    make clean
+    #
+    #    "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+    #        -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+    #
+    #    make -j "${TERMUX_MAKE_PROCESSES}"
+    #    install -Dm644 ../../../../lib/libQt5PacketProtocol.a "${TERMUX_PREFIX}/lib/libQt5PacketProtocol.a"
+    #    install -Dm644 ../../../../lib/libQt5PacketProtocol.prl "${TERMUX_PREFIX}/lib/libQt5PacketProtocol.prl"
+    #}
 
     #######################################################
     ##
@@ -209,75 +213,25 @@ termux_step_make_install() {
     #######################################################
 
     ## Qt Declarative utilities.
-    for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
-        cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/tools/${i}" && {
-            make clean
-
-            "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-                -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-            make -j "${TERMUX_MAKE_PROCESSES}"
-            install -Dm700 "../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
-        }
-    done
-
-    ## Qt Linguist utilities (qt5-tools).
-    ## Note: linguist application is not built !
-    for i in lconvert lrelease lupdate; do
-        cd "${TERMUX_PKG_SRCDIR}/qttools/src/linguist/${i}" && {
-            make clean
-
-            "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-                -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-            make -j "${TERMUX_MAKE_PROCESSES}"
-            install -Dm700 "../../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
-        }
-    done
-
-    ## qtattributionsscanner (part of qt5-tools).
-    cd "${TERMUX_PKG_SRCDIR}/qttools/src/qtattributionsscanner" && {
-        make clean
-
-        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-                -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-        make -j "${TERMUX_MAKE_PROCESSES}"
-        install -Dm700 "../../bin/qtattributionsscanner" "${TERMUX_PREFIX}/bin/qtattributionsscanner"
-    }
-
-    ## Qt5 Base utilities.
-    ## Note: qmake can be built only on host so it is omitted here.
-    for i in moc qlalr qvkgen rcc uic; do
-        cd "${TERMUX_PKG_SRCDIR}/qtbase/src/tools/${i}" && {
-            make clean
-
-            "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
-                -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
-
-            ## Ensure that no '-lpthread' specified in makefile.
-            sed \
-                -i 's@-lpthread@@g' \
-                "${TERMUX_PKG_SRCDIR}/qtbase/src/tools/${i}/Makefile"
-
-            ## Fix build failure on at least 'i686'.
-            sed \
-                -i 's@$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)@$(LINK) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS) $(LFLAGS) -lz@g' \
-                Makefile
-
-            make -j "${TERMUX_MAKE_PROCESSES}"
-            install -Dm700 "../../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
-        }
-    done
-    unset i
+    #for i in qmlcachegen qmlimportscanner qmllint qmlmin; do
+    #    cd "${TERMUX_PKG_SRCDIR}/qtdeclarative/tools/${i}" && {
+    #        make clean
+    #
+    #        "${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake" \
+    #            -spec "${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross"
+    #
+    #        make -j "${TERMUX_MAKE_PROCESSES}"
+    #        install -Dm700 "../../bin/${i}" "${TERMUX_PREFIX}/bin/${i}"
+    #    }
+    # done
 
     ## Unpacking prebuilt qmake from archive.
-    cd "${TERMUX_PKG_SRCDIR}" && {
-        tar xf "${TERMUX_PKG_BUILDER_DIR}/termux-prebuilt-qmake.txz"
-        install \
-            -Dm700 "./termux-prebuilt-qmake/bin/termux-${TERMUX_HOST_PLATFORM}-qmake" \
-            "${TERMUX_PREFIX}/bin/qmake"
-    }
+    #cd "${TERMUX_PKG_SRCDIR}" && {
+    #    tar xf "${TERMUX_PKG_BUILDER_DIR}/termux-prebuilt-qmake.txz"
+    #    install \
+    #        -Dm700 "./termux-prebuilt-qmake/bin/termux-${TERMUX_HOST_PLATFORM}-qmake" \
+    #        "${TERMUX_PREFIX}/bin/qmake"
+    #}
 
     #######################################################
     ##
@@ -314,11 +268,11 @@ termux_step_post_massage() {
     #######################################################
 
     ## qt5-tools
-    for i in lconvert lrelease lupdate qtattributionsscanner; do
-        install \
-            -Dm755 "${TERMUX_PKG_SRCDIR}/qttools/bin.host/${i}" \
-            "${TERMUX_PREFIX}/bin/${i}"
-    done
+    #for i in lconvert lrelease lupdate qtattributionsscanner; do
+    #    install \
+    #        -Dm755 "${TERMUX_PKG_SRCDIR}/qttools/bin.host/${i}" \
+    #        "${TERMUX_PREFIX}/bin/${i}"
+    #done
 
     ## qt5-base
     for i in moc qlalr qvkgen rcc uic; do
@@ -329,9 +283,9 @@ termux_step_post_massage() {
     unset i
 
     ## qmake
-    install \
-        -Dm755 "${TERMUX_PKG_SRCDIR}/qtbase/qmake/qmake" \
-        "${TERMUX_PREFIX}/bin/qmake"
+    #install \
+    #    -Dm755 "${TERMUX_PKG_SRCDIR}/qtbase/qmake/qmake" \
+    #    "${TERMUX_PREFIX}/bin/qmake"
 
     ## Restore qt spec path used for cross compiling.
     sed -i \

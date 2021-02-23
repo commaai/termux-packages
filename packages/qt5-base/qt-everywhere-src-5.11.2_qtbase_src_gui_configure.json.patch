@@ -6,7 +6,7 @@
          },
 +        "eglfs_surfaceflinger": {
 +            "label": "EGLFS Surfaceflinger",
-+            "condition": "features.eglfs && config.android-embedded",
++            "condition": "features.eglfs",
 +            "output": [ "privateFeature" ]
 +        },
          "gif": {
