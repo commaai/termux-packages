@@ -44,6 +44,8 @@ termux_step_configure () {
     export PKG_CONFIG_SYSROOT_DIR="${TERMUX_PREFIX}"
     unset CC CXX LD CFLAGS LDFLAGS
 
+
+    # TODO: more skipping
     "${TERMUX_PKG_SRCDIR}"/configure -v \
         -opensource \
         -confirm-license \
@@ -60,6 +62,7 @@ termux_step_configure () {
         -sysconfdir "${TERMUX_PREFIX}/etc/xdg" \
         -examplesdir "${TERMUX_PREFIX}/share/doc/qt/examples" \
         -plugindir "$TERMUX_PREFIX/libexec/qt" \
+        -nomake tests \
         -nomake examples \
         -skip qt3d \
         -skip qtactiveqt \
@@ -100,14 +103,14 @@ termux_step_configure () {
         -no-accessibility \
         -no-glib \
         -no-eventfd \
-        -icu \
-        -system-pcre \
+        -no-icu \
+        -qt-pcre \
         -system-zlib \
         -ssl \
         -openssl-linked \
         -no-system-proxies \
         -no-cups \
-        -system-harfbuzz \
+        -qt-harfbuzz \
         -no-opengl \
         -no-vulkan \
         -qpa xcb \
@@ -116,19 +119,16 @@ termux_step_configure () {
         -no-kms \
         -no-linuxfb \
         -no-mirclient \
-        -system-xcb \
         -no-libudev \
         -no-evdev \
         -no-libinput \
         -no-mtdev \
         -no-tslib \
-        -system-xkbcommon-x11 \
         -no-xkbcommon-evdev \
         -gif \
         -ico \
         -system-libpng \
-        -system-libjpeg \
-        -sql-sqlite \
+        -qt-libjpeg \
         -no-feature-dnslookup
 }
 
