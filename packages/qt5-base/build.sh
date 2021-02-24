@@ -79,7 +79,6 @@ termux_step_configure () {
         -skip qtimageformats \
         -skip qtlocation \
         -skip qtmacextras \
-        -skip qtmultimedia \
         -skip qtnetworkauth \
         -skip qtpurchasing \
         -skip qtquickcontrols \
