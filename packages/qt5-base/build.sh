@@ -124,7 +124,6 @@ termux_step_configure () {
         -no-linuxfb \
         -no-mirclient \
         -no-libudev \
-        -no-evdev \
         -no-libinput \
         -no-mtdev \
         -no-tslib \
