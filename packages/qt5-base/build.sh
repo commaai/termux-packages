@@ -109,7 +109,7 @@ termux_step_configure () {
         -no-eventfd \
         -no-icu \
         -qt-pcre \
-        -system-zlib \
+        -no-zlib \
         -ssl \
         -openssl-linked \
         -no-system-proxies \
@@ -204,7 +204,8 @@ termux_step_make_install() {
     #}
 
     ## qt5-base tools
-    for i in moc qlalr qvkgen rcc uic; do
+    #for i in moc qlalr qvkgen rcc uic; do
+    for i in moc qlalr qvkgen uic; do
         pushd ${TERMUX_PKG_SRCDIR}/qtbase/src/tools/$i
         make clean
         ${TERMUX_PKG_SRCDIR}/qtbase/bin/qmake -spec ${TERMUX_PKG_SRCDIR}/qtbase/mkspecs/termux-cross

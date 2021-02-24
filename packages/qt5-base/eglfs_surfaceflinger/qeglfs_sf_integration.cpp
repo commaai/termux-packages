@@ -18,7 +18,7 @@ void QEglFSSurfaceFlingerIntegration::platformInit() {
     status_t ret;
 
     session = new SurfaceComposerClient;
-    assert(session->initCheck());
+    assert(session->initCheck() == 0);
 
     dtoken = SurfaceComposerClient::getBuiltInDisplay(
                 ISurfaceComposer::eDisplayIdMain);

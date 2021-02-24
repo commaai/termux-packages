@@ -11,8 +11,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class QEglFSSurfaceFlingerIntegration : public QEglFSDeviceIntegration
-{
+class QEglFSSurfaceFlingerIntegration : public QEglFSDeviceIntegration {
 public:
     QByteArray fbDeviceName() const override { return "/dev/graphics/fb0"; }
 
@@ -21,6 +20,7 @@ public:
     QSize screenSize() const override;
     QSurfaceFormat surfaceFormatFor(const QSurfaceFormat &inputFormat) const override;
     EGLNativeWindowType createNativeWindow(QPlatformWindow *window, const QSize &size, const QSurfaceFormat &format) override;
+
 private:
     QSize mSize;
 
