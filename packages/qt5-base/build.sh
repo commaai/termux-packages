@@ -2,13 +2,12 @@ TERMUX_PKG_HOMEPAGE=https://www.qt.io/
 TERMUX_PKG_DESCRIPTION="A cross-platform application and UI framework"
 TERMUX_PKG_LICENSE="LGPL-3.0"
 TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
-TERMUX_PKG_VERSION=5.11.3  # TODO: use 5.12.8
+TERMUX_PKG_VERSION=5.12.4
 TERMUX_PKG_REVISION=28
 #TERMUX_PKG_SRCURL="http://master.qt.io/archive/qt/${TERMUX_PKG_VERSION%.*}/${TERMUX_PKG_VERSION}/single/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SRCURL="https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
-TERMUX_PKG_SHA256=859417642713cee2493ee3646a7fee782c9f1db39e41d7bb1322bba0c5f0ff4d
-#TERMUX_PKG_DEPENDS="harfbuzz, libandroid-shmem, libc++, libjpeg-turbo, libpng, libuuid, openssl, pcre2, zlib"
-TERMUX_PKG_DEPENDS="libc++, zlib"
+TERMUX_PKG_SHA256=85da5e0ee498759990180d5b8192efaa6060a313c5018b772f57d446bdd425e1
+TERMUX_PKG_DEPENDS="libc++, zlib, openssl"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
 
@@ -99,7 +98,6 @@ termux_step_configure () {
         -skip qtwebengine \
         -skip qtwebglplugin \
         -skip qtwebsockets \
-        -skip qtwebview \
         -skip qtwinextras \
         -skip qtxmlpatterns \
         -skip x11extras \
@@ -132,7 +130,6 @@ termux_step_configure () {
         -sql-sqlite \
         -system-libpng \
         -qt-libjpeg \
-        -no-feature-dnslookup \
         -no-feature-dbus
 }
 
