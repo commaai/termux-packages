@@ -7,7 +7,7 @@ TERMUX_PKG_REVISION=28
 #TERMUX_PKG_SRCURL="http://master.qt.io/archive/qt/${TERMUX_PKG_VERSION%.*}/${TERMUX_PKG_VERSION}/single/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SRCURL="https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SHA256=85da5e0ee498759990180d5b8192efaa6060a313c5018b772f57d446bdd425e1
-TERMUX_PKG_DEPENDS="libc++, zlib, openssl"
+TERMUX_PKG_DEPENDS="libc++, zlib, openssl, libpng"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
 
@@ -46,6 +46,7 @@ termux_step_configure () {
     unset CC CXX LD CFLAGS LDFLAGS
 
     # TODO: more skipping
+    export OPENSSL_LIBS="-l"
     "${TERMUX_PKG_SRCDIR}"/configure -v \
         -opensource \
         -confirm-license \
@@ -108,7 +109,7 @@ termux_step_configure () {
         -qt-pcre \
         -no-zlib \
         -ssl \
-        -openssl-linked \
+        -openssl \
         -no-system-proxies \
         -no-cups \
         -qt-harfbuzz \
@@ -124,7 +125,6 @@ termux_step_configure () {
         -no-libinput \
         -no-mtdev \
         -no-tslib \
-        -no-xkbcommon-evdev \
         -gif \
         -ico \
         -sql-sqlite \
