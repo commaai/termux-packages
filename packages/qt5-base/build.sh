@@ -2,11 +2,13 @@ TERMUX_PKG_HOMEPAGE=https://www.qt.io/
 TERMUX_PKG_DESCRIPTION="A cross-platform application and UI framework"
 TERMUX_PKG_LICENSE="LGPL-3.0"
 TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
-TERMUX_PKG_VERSION=5.12.4
+#TERMUX_PKG_VERSION=5.12.4
+TERMUX_PKG_VERSION=5.11.3
 TERMUX_PKG_REVISION=28
 #TERMUX_PKG_SRCURL="http://master.qt.io/archive/qt/${TERMUX_PKG_VERSION%.*}/${TERMUX_PKG_VERSION}/single/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SRCURL="https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
-TERMUX_PKG_SHA256=85da5e0ee498759990180d5b8192efaa6060a313c5018b772f57d446bdd425e1
+#TERMUX_PKG_SHA256=85da5e0ee498759990180d5b8192efaa6060a313c5018b772f57d446bdd425e1
+TERMUX_PKG_SHA256=859417642713cee2493ee3646a7fee782c9f1db39e41d7bb1322bba0c5f0ff4d
 TERMUX_PKG_DEPENDS="libc++, zlib, openssl, libpng"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
@@ -46,7 +48,6 @@ termux_step_configure () {
     unset CC CXX LD CFLAGS LDFLAGS
 
     # TODO: more skipping
-    export OPENSSL_LIBS="-l"
     "${TERMUX_PKG_SRCDIR}"/configure -v \
         -opensource \
         -confirm-license \
@@ -109,7 +110,7 @@ termux_step_configure () {
         -qt-pcre \
         -no-zlib \
         -ssl \
-        -openssl \
+        -openssl-linked \
         -no-system-proxies \
         -no-cups \
         -qt-harfbuzz \
@@ -125,6 +126,7 @@ termux_step_configure () {
         -no-libinput \
         -no-mtdev \
         -no-tslib \
+        -no-xkbcommon-evdev \
         -gif \
         -ico \
         -sql-sqlite \
@@ -151,10 +153,10 @@ termux_step_make_install() {
         cp -a bin bin.host
     }
 
-    #cd "${TERMUX_PKG_SRCDIR}/qttools" && {
-    #    mkdir -p bin.host
-    #    cp -a bin/{lconvert,lrelease,lupdate,qtattributionsscanner} bin.host/
-    #}
+    cd "${TERMUX_PKG_SRCDIR}/qttools" && {
+        mkdir -p bin.host
+        cp -a bin/{lconvert,lrelease,lupdate,qtattributionsscanner} bin.host/
+    }
 
     #######################################################
     ##
