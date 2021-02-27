@@ -2,7 +2,7 @@ diff -uNr qt-everywhere-src-5.11.2/qtbase/mkspecs/termux/qmake.conf qt-everywher
 --- qt-everywhere-src-5.11.2/qtbase/mkspecs/termux/qmake.conf	1970-01-01 03:00:00.000000000 +0300
 +++ qt-everywhere-src-5.11.2.mod/qtbase/mkspecs/termux/qmake.conf	2018-09-21 16:26:18.042253449 +0300
 @@ -0,0 +1,31 @@
-+QT_QPA_DEFAULT_PLATFORM = xcb
++QT_QPA_DEFAULT_PLATFORM = eglfs
 +
 +MAKEFILE_GENERATOR      = UNIX
 +CONFIG                 += incremental
