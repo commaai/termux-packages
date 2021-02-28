@@ -9,7 +9,7 @@ TERMUX_PKG_REVISION=28
 #TERMUX_PKG_SRCURL="https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SRCURL="http://www.mirrorservice.org/sites/download.qt-project.org/official_releases/qt/${_MAJOR_VERSION}/${TERMUX_PKG_VERSION}/single/qt-everywhere-src-${TERMUX_PKG_VERSION}.tar.xz"
 TERMUX_PKG_SHA256=9142300dfbd641ebdea853546511a352e4bd547c4c7f25d61a40cd997af1f0cf
-TERMUX_PKG_DEPENDS="libc++, zlib, openssl, libpng"
+TERMUX_PKG_DEPENDS="libc++, zlib, openssl, libicu"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_NO_STATICSPLIT=true
 
@@ -50,6 +50,7 @@ termux_step_configure () {
     # TODO: more skipping
     "${TERMUX_PKG_SRCDIR}"/configure -v \
         -L/data/data/com.termux/files/usr/lib \
+        -I/data/data/com.termux/files/usr/include \
         -opensource \
         -confirm-license \
         -release \
@@ -74,12 +75,9 @@ termux_step_configure () {
         -skip qtcharts \
         -skip qtconnectivity \
         -skip qtdatavis3d \
-        -skip qtdeclarative \
         -skip qtdoc \
         -skip qtgamepad \
         -skip qtgraphicaleffects \
-        -skip qtimageformats \
-        -skip qtlocation \
         -skip qtmacextras \
         -skip qtnetworkauth \
         -skip qtpurchasing \
@@ -87,14 +85,11 @@ termux_step_configure () {
         -skip qtquickcontrols2 \
         -skip qtremoteobjects \
         -skip qtscript \
-        -skip qtscxml \
         -skip qtsensors \
         -skip qtserialbus \
         -skip qtserialport \
         -skip qtspeech \
-        -skip qtsvg \
         -skip qttools \
-        -skip qttranslations \
         -skip qtvirtualkeyboard \
         -skip qtwayland \
         -skip qtwebchannel \
@@ -107,9 +102,9 @@ termux_step_configure () {
         -no-accessibility \
         -no-glib \
         -no-eventfd \
-        -no-icu \
+        -icu \
         -qt-pcre \
-        -no-zlib \
+        -system-zlib \
         -ssl \
         -openssl-linked \
         -no-cups \
@@ -128,12 +123,11 @@ termux_step_configure () {
         -no-libinput \
         -no-mtdev \
         -no-tslib \
-        -no-xkbcommon \
         -gif \
         -ico \
         -sql-sqlite \
-        -system-libpng \
-        -system-libjpeg
+        -qt-libpng \
+        -qt-libjpeg
 }
 
 termux_step_make() {
