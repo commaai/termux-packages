@@ -3,7 +3,7 @@ TERMUX_PKG_DESCRIPTION="Library for text-based user interfaces in a terminal-ind
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=(6.2.20200725
-		    9.22
+		    9.26
 		    15
 		    0.19.3)
 TERMUX_PKG_REVISION=2
@@ -12,7 +12,7 @@ TERMUX_PKG_SRCURL=(https://github.com/termux/distfiles/releases/download/2021.01
 		   https://github.com/thestinger/termite/archive/v${TERMUX_PKG_VERSION[2]}.tar.gz
 		   https://github.com/kovidgoyal/kitty/archive/v${TERMUX_PKG_VERSION[3]}.tar.gz)
 TERMUX_PKG_SHA256=(05da39f964643b595bfdb874e52eabfd407c02d8fbed35602040735f4af9b09d
-		   e94628e9bcfa0adb1115d83649f898d6edb4baced44f5d5b769c2eeb8b95addd
+		   643116b9a25d29ad29f4890131796d42e6d2d21312282a613ef66c80c5b8c98b
 		   3ae9ebef28aad081c6c11351f086776e2fd9547563b2f900732b41c376bec05a
 		   28fc5de9b8934174801aa7d95c5a6f4c878a7e93eea15cdf06d9c982e1cd2fec)
 # ncurses-utils: tset/reset/clear are moved to package 'ncurses'.
