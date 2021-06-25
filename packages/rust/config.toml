@@ -10,7 +10,7 @@ target = ["@triple@", "wasm32-unknown-unknown"]
 rustc = "@RUSTC@"
 cargo = "@CARGO@"
 
-python = "python2.7"
+python = "python3.8"
 extended = true
 sanitizers = false
 
