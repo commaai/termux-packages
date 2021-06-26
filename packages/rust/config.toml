@@ -9,12 +9,13 @@ host = ["@triple@"]
 target = ["@triple@", "wasm32-unknown-unknown"]
 rustc = "@RUSTC@"
 cargo = "@CARGO@"
+docs = false
 
 python = "python3.8"
 extended = true
 sanitizers = false
 
-#tools = ["cargo", "analysis", "rls", "rustfmt", "clippy-driver" ]
+tools = ["cargo", "analysis", "rustfmt", "clippy-driver" ]
 
 [install]
 prefix = "@TERMUX_PREFIX@"

@@ -53,6 +53,7 @@ termux_step_configure() {
 termux_step_make() {
 	return 0;
 }
+
 termux_step_make_install() {
 	# ugly fix to get extended tools working
 	$TERMUX_PKG_SRCDIR/x.py dist --stage 2 --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME --target wasm32-unknown-unknown || true
@@ -71,3 +72,4 @@ termux_step_make_install() {
 		manifest-* \
 		x86_64-unknown-linux-gnu
 }
+
