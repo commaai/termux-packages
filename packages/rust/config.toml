@@ -15,7 +15,7 @@ python = "python3.8"
 extended = true
 sanitizers = false
 
-tools = ["cargo", "analysis", "rustfmt", "clippy-driver" ]
+tools = ["cargo", "analysis", "clippy-driver"]
 
 [install]
 prefix = "@TERMUX_PREFIX@"
