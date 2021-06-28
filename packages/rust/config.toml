@@ -38,4 +38,4 @@ llvm-config = "@TERMUX_PREFIX@/bin/llvm-config"
 
 [dist]
 src-tarball = false
-#missing-tools = true
+missing-tools = true

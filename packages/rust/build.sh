@@ -2,10 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://www.rust-lang.org/
 TERMUX_PKG_DESCRIPTION="Systems programming language focused on safety, speed and concurrency"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="Kevin Cotugno @kcotugno"
-TERMUX_PKG_VERSION=1.41.0
+TERMUX_PKG_VERSION=1.49.0
 TERMUX_PKG_REVISION=4
 TERMUX_PKG_SRCURL=https://static.rust-lang.org/dist/rustc-$TERMUX_PKG_VERSION-src.tar.xz
-TERMUX_PKG_SHA256=38d6742e5c4c98a835de5d6e12a209e442fb3078a03b2c01bab6ea7afb25be6f
+TERMUX_PKG_SHA256=ebe910edc824a0a037a10be443446a0511923ba8342fa3c331ec8a22481d5d15
 TERMUX_PKG_DEPENDS="libc++, clang, openssl, lld, zlib, libllvm"
 
 termux_step_configure() {
@@ -19,11 +19,12 @@ termux_step_configure() {
 	# like 30 to 40 + minutes ... so lets get it right
 
 	# upstream only tests build ver one version behind $TERMUX_PKG_VERSION
-	rustup install 1.40.0
-	rustup default 1.40.0-x86_64-unknown-linux-gnu
-	export PATH=$HOME/.rustup/toolchains/1.40.0-x86_64-unknown-linux-gnu/bin:$PATH
+  local BOOTSTRAP_VERSION=1.48.0
+  rustup install $BOOTSTRAP_VERSION
+  rustup default $BOOTSTRAP_VERSION-x86_64-unknown-linux-gnu
+  export PATH=$HOME/.rustup/toolchains/$BOOTSTRAP_VERSION-x86_64-unknown-linux-gnu/bin:$PATH
   local RUSTC=$(which rustc)
-	local CARGO=$(which cargo)
+  local CARGO=$(which cargo)
 
 	sed "s%\\@TERMUX_PREFIX\\@%$TERMUX_PREFIX%g" \
 		$TERMUX_PKG_BUILDER_DIR/config.toml \
@@ -34,7 +35,7 @@ termux_step_configure() {
 		> config.toml
 
 	local env_host=$(printf $CARGO_TARGET_NAME | tr a-z A-Z | sed s/-/_/g)
-	export LD_LIBRARY_PATH=$TERMUX_PKG_BUILDDIR/build/x86_64-unknown-linux-gnu/stage2/lib
+	#export LD_LIBRARY_PATH=$TERMUX_PKG_BUILDDIR/build/x86_64-unknown-linux-gnu/stage2/lib
 	export ${env_host}_OPENSSL_DIR=$TERMUX_PREFIX
 	export X86_64_UNKNOWN_LINUX_GNU_OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu
 	export X86_64_UNKNOWN_LINUX_GNU_OPENSSL_INCLUDE_DIR=/usr/include
@@ -43,7 +44,7 @@ termux_step_configure() {
 	export CC_x86_64_unknown_linux_gnu=gcc
 	export CFLAGS_x86_64_unknown_linux_gnu="-O2"
 	unset CC CXX CPP LD CFLAGS CXXFLAGS CPPFLAGS LDFLAGS PKG_CONFIG AR RANLIB
-	# we can't use -L$PREFIX/lib since it breaks things but we need to link against libLLVM-9.so
+	# we can't use -L$PREFIX/lib since it breaks things but we need to link against libLLVM-8.so
 	ln -sf $PREFIX/lib/libLLVM-8.0.0.so $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/$TERMUX_PKG_API_LEVEL/
 
 	# rust checks libs in PREFIX/lib because both host and target are x86_64. It then can't find libc.so and libdl.so because rust program doesn't 
@@ -52,7 +53,6 @@ termux_step_configure() {
 		cp $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/x86_64-linux-android/$TERMUX_PKG_API_LEVEL/libc.so $TERMUX_PREFIX/lib/
 		cp $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/x86_64-linux-android/$TERMUX_PKG_API_LEVEL/libdl.so $TERMUX_PREFIX/lib/
 	fi
-  rm $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/$TERMUX_PKG_API_LEVEL/libLLVM-8.0.0.so
 }
 
 termux_step_make() {
@@ -60,10 +60,12 @@ termux_step_make() {
 }
 
 termux_step_make_install() {
-	$TERMUX_PKG_SRCDIR/x.py dist librustc --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
-  $TERMUX_PKG_SRCDIR/x.py dist rustc-dev --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
-	$TERMUX_PKG_SRCDIR/x.py install --stage 2 --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
-	tar xvf build/dist/rustc-dev-$TERMUX_PKG_VERSION-$CARGO_TARGET_NAME.tar.gz
+	$TERMUX_PKG_SRCDIR/x.py install --stage 1 --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
+	$TERMUX_PKG_SRCDIR/x.py dist rustc-dev --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
+  #$TERMUX_PKG_SRCDIR/x.py dist librustc --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
+  #$TERMUX_PKG_SRCDIR/x.py dist rustc-dev --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
+	#$TERMUX_PKG_SRCDIR/x.py install --stage 2 --host $CARGO_TARGET_NAME --target $CARGO_TARGET_NAME
+  tar xvf build/dist/rustc-dev-$TERMUX_PKG_VERSION-$CARGO_TARGET_NAME.tar.gz
 	./rustc-dev-$TERMUX_PKG_VERSION-$CARGO_TARGET_NAME/install.sh --prefix=$TERMUX_PREFIX
   cd "$TERMUX_PREFIX/lib"
 	rm -f libc.so libdl.so
@@ -77,5 +79,5 @@ termux_step_make_install() {
 		rust-installer-version \
 		manifest-* \
 		x86_64-unknown-linux-gnu
+  rm $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/lib/$TERMUX_HOST_PLATFORM/$TERMUX_PKG_API_LEVEL/libLLVM-8.0.0.so
 }
-
